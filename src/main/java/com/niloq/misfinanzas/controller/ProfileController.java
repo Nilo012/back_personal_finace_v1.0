@@ -62,4 +62,10 @@ public class ProfileController {
         }
     }
 
+    @GetMapping("/test")
+    public String test() {
+        // Lógica para obtener la información del perfil del usuario autenticado
+        return "Información del perfil del usuario autenticado";
+    }
+
 }
