@@ -62,6 +62,8 @@ public class ProfileController {
         }
     }
 
+    
+    // Endpoint de prueba para verificar la autenticación del usuario
     @GetMapping("/test")
     public String test() {
         // Lógica para obtener la información del perfil del usuario autenticado
