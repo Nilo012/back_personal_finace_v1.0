@@ -1,7 +1,8 @@
 package com.niloq.misfinanzas.repository;
 
 
-import org.springframework.boot.data.autoconfigure.web.DataWebProperties.Sort;
+import org.springframework.data.domain.Sort;
+//import org.springframework.boot.data.autoconfigure.web.DataWebProperties.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,7 +24,7 @@ public interface ExpenseRepository extends JpaRepository<ExpenseEntity, Long> {
     // 
     @Query("SELECT SUM(e.amount) FROM ExpenseEntity e WHERE e.profile.id= :profileId")
     BigDecimal findTotalExpenseByProfileId(@Param("profileId") Long profileId);
-    //
+    // Filtro avanzado: permite buscar por rango de fechas, palabra clave (nombre) y aplicar ordenamiento dinámico
     List<ExpenseEntity> findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(
         Long profileId,
         LocalDate startDate,

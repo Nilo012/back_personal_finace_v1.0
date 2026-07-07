@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.niloq.misfinanzas.dto.ExpenseDTO;
@@ -98,7 +99,6 @@ public class ExpenseService {
         expenseRepository.delete(entity);
     }
 
-
     /**
      * Obtiene los últimos 5 gastos registrados por el usuario actual,
      * ordenados del más reciente al más antiguo.
@@ -118,8 +118,6 @@ public class ExpenseService {
                 .toList();
     }
 
-
-
     /**
      * Calcula la suma total de los montos de todos los gastos del usuario actual.
      * 
@@ -137,9 +135,31 @@ public class ExpenseService {
         return total != null ? total : BigDecimal.ZERO;
     }
 
+    // filtrar gastos
+    /**
+     * Filtra los gastos del usuario actual según un rango de fechas,
+     * un término de búsqueda (palabra clave) y criterios de ordenamiento.
+     * * @param startDate Fecha inicial del filtro.
+     * 
+     * @param endDate Fecha final del filtro.
+     * @param keyword Palabra clave para buscar en los nombres de los gastos.
+     * @param sort    Parámetros de ordenamiento (campo y dirección).
+     * @return Lista de gastos (DTOs) que coinciden con los criterios.
+     */
+    public List<ExpenseDTO> filterExpenses(LocalDate startDate, LocalDate endDate, String keyword, Sort sort) {
+        // 1. Obtiene el perfil autenticado para asegurar el acceso a datos privados
+        ProfileEntity profile = profileService.getCurrentProfile();
 
+        // 2. Consulta al repositorio aplicando filtros de fecha, nombre y ordenamiento
+        List<ExpenseEntity> list = expenseRepository.findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(
+                profile.getId(), startDate, endDate, keyword, sort);
 
-    
+        // 3. Convierte las entidades resultantes a formato DTO para el cliente
+        return list.stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
     // metodos auxiliares
     private ExpenseEntity toEntity(ExpenseDTO dto, ProfileEntity profile, CategoryEntity category) {
         return ExpenseEntity.builder()

@@ -4,10 +4,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.niloq.misfinanzas.dto.ExpenseDTO;
 import com.niloq.misfinanzas.dto.IncomeDTO;
 import com.niloq.misfinanzas.entity.CategoryEntity;
+import com.niloq.misfinanzas.entity.ExpenseEntity;
 import com.niloq.misfinanzas.entity.IncomeEntity;
 import com.niloq.misfinanzas.entity.ProfileEntity;
 import com.niloq.misfinanzas.repository.CategoryRepository;
@@ -81,7 +84,13 @@ public class IncomeService {
         return total != null ? total : BigDecimal.ZERO;
     }
 
-
+    // filtrar ingresos
+    public List<IncomeDTO> filterIncomes(LocalDate startDate, LocalDate endDate, String keyword, Sort sort) {
+        ProfileEntity profile = profileService.getCurrentProfile();
+        List<IncomeEntity> list = incomeRepository.findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(
+                profile.getId(), startDate, endDate, keyword, sort);
+        return list.stream().map(this::toDTO).toList();
+    }
 
     // metodos auxiliares
     private IncomeEntity toEntity(IncomeDTO dto, ProfileEntity profile, CategoryEntity category) {
