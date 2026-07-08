@@ -36,4 +36,15 @@ public interface ExpenseRepository extends JpaRepository<ExpenseEntity, Long> {
     // Obtiene una lista de gastos de un perfil dentro de un rango de fechas específico
     // SQL: SELECT * FROM tbl_expenses WHERE profile_id = ? AND date BETWEEN ? AND ?
     List<ExpenseEntity> findByProfileIdAndDateBetween(Long profileId, LocalDate startDate, LocalDate endDate);
+
+    /**
+     * para notificaciones
+     * Busca todos los gastos realizados por un perfil en una fecha específica.
+     * Ideal para reportes diarios o envío de notificaciones automáticas.
+     * @param profileId ID del perfil al que pertenecen los gastos.
+     * @param date Fecha exacta a consultar.
+     * @return Lista de gastos (ExpenseEntity) registrados en esa fecha.
+     */
+    // select * from tbl_expenses where profile_id =?1 and date =? 2
+    List<ExpenseEntity> findByProfileIdAndDate(Long profileId, LocalDate date);
 }

@@ -7,10 +7,9 @@ import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.niloq.misfinanzas.dto.ExpenseDTO;
 import com.niloq.misfinanzas.dto.IncomeDTO;
 import com.niloq.misfinanzas.entity.CategoryEntity;
-import com.niloq.misfinanzas.entity.ExpenseEntity;
+
 import com.niloq.misfinanzas.entity.IncomeEntity;
 import com.niloq.misfinanzas.entity.ProfileEntity;
 import com.niloq.misfinanzas.repository.CategoryRepository;
