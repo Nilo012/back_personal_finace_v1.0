@@ -12,6 +12,7 @@ import com.niloq.misfinanzas.entity.ProfileEntity;
 import com.niloq.misfinanzas.repository.ProfileRepository;
 import com.niloq.misfinanzas.util.JwtUtil;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,6 +33,9 @@ public class ProfileService {
 
     private final JwtUtil jwtUtil;
 
+    @Value("${app.activation.url}")
+    private String activationURL;
+
 
 
     // Método para registrar un nuevo perfil de usuario
@@ -42,7 +46,8 @@ public class ProfileService {
 
         newProfile = profileRepository.save(newProfile);
         // enviar correo de activacion
-        String activationLink = "http://localhost:8080/api/v1.0/activate?token=" + newProfile.getActivationToken();
+        //String activationLink = "http://localhost:8080/api/v1.0/activate?token=" + newProfile.getActivationToken();
+         String activationLink =  activationURL+"/api/v1.0/activate?token=" + newProfile.getActivationToken();
         String subject = "Activa tu cuenta de finanzas personales";
         String body = "Haz clic en el siguiente enlace para activar tu cuenta " + activationLink;
         emailService.sendEmail(newProfile.getEmail(), subject, body);
